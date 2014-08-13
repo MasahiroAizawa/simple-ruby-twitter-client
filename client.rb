@@ -13,8 +13,10 @@ class Twitter::Tweet
     time = self.created_at
     text = self.text
     <<-TEXT
-    #{screen_name} (#{time})
-    #{text}
+--------
+#{screen_name} (#{time})
+
+#{text}
     TEXT
   end
 end
