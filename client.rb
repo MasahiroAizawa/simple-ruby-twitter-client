@@ -67,6 +67,13 @@ while true
     timeline.each do |tweet|
       puts tweet.to_text
     end
+  when :help
+    puts <<-HELP
+help : You are seeing.
+tw   : Tweet with message usage: "tw hoge"
+read : Display your lastest timeline.
+exit : Exit this app.
+    HELP
   when :exit
     puts 'End'
     exit
