@@ -1,0 +1,2 @@
+source .twitter_config
+ruby client.rb
