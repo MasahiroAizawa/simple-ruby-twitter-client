@@ -7,6 +7,18 @@ class Object
   end
 end
 
+class Twitter::Tweet
+  def to_text
+    screen_name = self.user.screen_name
+    time = self.created_at
+    text = self.text
+    <<-TEXT
+    #{screen_name} (#{time})
+    #{text}
+    TEXT
+  end
+end
+
 CONSUMER_KEY = ENV['CONSUMER_KEY']
 CONSUMER_SECRET = ENV['CONSUMER_SECRET']
 
@@ -36,18 +48,6 @@ client = Twitter::REST::Client.new do |config|
   config.consumer_secret = CONSUMER_SECRET
   config.access_token = ENV['ACCESS_TOKEN']
   config.access_token_secret = ENV['ACCESS_TOKEN_SECRET']
-end
-
-class Twitter::Tweet
-  def to_text
-    screen_name = self.user.screen_name
-    time = self.created_at
-    text = self.text
-    <<-TEXT
-    #{screen_name} (#{time})
-    #{text}
-    TEXT
-  end
 end
 
 puts 'Twitter Client起動'
