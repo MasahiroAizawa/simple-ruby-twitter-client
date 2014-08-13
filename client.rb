@@ -1,8 +1,39 @@
 require 'twitter'
+require 'oauth'
+
+class Object
+  def blank?
+    self.nil? || self.empty?
+  end
+end
+
+CONSUMER_KEY = ENV['CONSUMER_KEY']
+CONSUMER_SECRET = ENV['CONSUMER_SECRET']
+
+if ENV['ACCESS_TOKEN'].blank? || ENV['ACCESS_TOKEN_SECRET']
+  consumer = OAuth::Consumer.new(
+    CONSUMER_KEY,
+    CONSUMER_SECRET,
+    site: 'https://api.twitter.com'
+  )
+  request_token = consumer.get_request_token
+  system('open', request_token.authorize_url) || puts("Access here: #{request_token.authorize_url}")
+  print 'Input PIN:'
+  pin = gets.chomp
+  access_token = request_token.get_access_token(
+    oauth_token: request_token.token,
+    oauth_verifier: pin
+  )
+  token = access_token.token
+  secret = access_token.secret
+
+  `echo 'export ACCESS_TOKEN=#{token}' >> .twitter_config`
+  `echo 'export ACCESS_TOKEN_SECRET=#{secret}' >> .twitter_config`
+end
 
 client = Twitter::REST::Client.new do |config|
-  config.consumer_key = ENV['CONSUMER_KEY']
-  config.consumer_secret = ENV['CONSUMER_SECRET']
+  config.consumer_key = CONSUMER_KEY
+  config.consumer_secret = CONSUMER_SECRET
   config.access_token = ENV['ACCESS_TOKEN']
   config.access_token_secret = ENV['ACCESS_TOKEN_SECRET']
 end
